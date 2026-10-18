@@ -27,7 +27,7 @@ public class AlarmDismissActivity extends Activity {
             PowerManager.WakeLock wl = pm.newWakeLock(
                     PowerManager.SCREEN_BRIGHT_WAKE_LOCK |
                     PowerManager.ACQUIRE_CAUSES_WAKEUP |
-                    PowerManager.FULL_WAKE_LOCK, "shenyu:alarmdismiss");
+                    PowerManager.FULL_WAKE_LOCK, "aialarm:alarmdismiss");
             wl.acquire(60L * 1000L);
         }
 
