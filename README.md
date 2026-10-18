@@ -79,7 +79,7 @@ APP_NAME="AI闹钟" bash build.sh
 cp ai_alarm_v7_5.apk /data/local/tmp/
 pm install -r /data/local/tmp/ai_alarm_v7_5.apk
 # 通知权限（Android 13+）
-pm grant com.shenyu.alarm android.permission.POST_NOTIFICATIONS
+pm grant com.aialarm android.permission.POST_NOTIFICATIONS
 ```
 
 ## 用法
@@ -87,7 +87,7 @@ pm grant com.shenyu.alarm android.permission.POST_NOTIFICATIONS
 设置闹钟一律走 `startservice`（**不要用广播**，MIUI Greezer 会拦发往 cached 进程的广播）：
 
 ```bash
-SVC=com.shenyu.alarm/.AlarmSetService
+SVC=com.aialarm/.AlarmSetService
 
 # 1) 设主闹钟（可带口令、可带 AI 的名字）
 am startservice -n $SVC --ei hour 8 --ei minute 0 --es label "起床啦" \
@@ -113,7 +113,7 @@ am startservice -n $SVC --es action extra --ei hour 13 --ei minute 30 \
     --es label "午休" --ei daysCount 1
 
 # 8) 测试响铃
-am start-foreground-service -n com.shenyu.alarm/.AlarmRingService --es label "测试"
+am start-foreground-service -n com.aialarm/.AlarmRingService --es label "测试"
 ```
 
 > `Calendar.DAY_OF_WEEK`：1=周日，2=周一 …… 7=周六
@@ -124,19 +124,19 @@ am start-foreground-service -n com.shenyu.alarm/.AlarmRingService --es label "�
 
 ```bash
 # 正确数法（只数当前排程，不含取消历史）
-dumpsys alarm | grep 'Alarm{' | grep -c 'com.shenyu.alarm'
+dumpsys alarm | grep 'Alarm{' | grep -c 'com.aialarm'
 
 # 看最早几次
- dumpsys alarm | grep 'Alarm{' | grep 'com.shenyu.alarm' \
+ dumpsys alarm | grep 'Alarm{' | grep 'com.aialarm' \
    | grep -o 'origWhen [0-9]*' | awk '{print $2}' | sort -n | head -3
 
 # 看日志
-logcat -d -s ShenYuAlarm | tail -10
+logcat -d -s AiAlarm | tail -10
 ```
 
-> ⚠️ `dumpsys alarm | grep com.shenyu.alarm` 里混着大量 `Reason=pi_cancelled` 的**取消历史**，
+> ⚠️ `dumpsys alarm | grep com.aialarm` 里混着大量 `Reason=pi_cancelled` 的**取消历史**，
 > 直接数会数出几百条假排程。**必须加 `grep 'Alarm{'` 过滤。**
-> 另外 `/data/data/com.shenyu.alarm/shared_prefs/` 在 shell 下是 `Permission denied`，读不到 app 私有配置。
+> 另外 `/data/data/com.aialarm/shared_prefs/` 在 shell 下是 `Permission denied`，读不到 app 私有配置。
 
 ## 踩坑记录
 
